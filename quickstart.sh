@@ -110,8 +110,10 @@ curl -u 'elastic:ElasticRocks' -X POST "localhost:9200/_security/role/anonymous_
 }
 '
 
-echo -e "${MINOR}waiting for Keycloak to be available${RESET}"
-./keycloak/wait-for-keycloak.sh
+if $offline_lab; then
+  echo -e "${MINOR}waiting for Keycloak to be available${RESET}"
+  ./keycloak/wait-for-keycloak.sh
+fi
 
 echo -e "${MAJOR}Creating ecommerce index and defining its mapping.\n${RESET}"
 curl -u 'elastic:ElasticRocks' -s -X PUT "localhost:9200/ecommerce/" -H 'Content-Type: application/json' --data-binary @./elasticsearch/schema.json
@@ -209,4 +211,4 @@ if $observability; then
   curl -u admin:password -S -X POST -H "Content-Type: application/json" http://localhost:9091/api/users/2/using/1
 fi
 
-echo -e "${MAJOR}Welcome to Chorus!${RESET}"
+echo -e "${MAJOR}\nWelcome to Chorus!${RESET}"
